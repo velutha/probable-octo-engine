@@ -1,10 +1,5 @@
 import dbm
-
-# storage1 = dbm.open('storage1', 'c')
-# storage2 = dbm.open('storage2', 'c')
-
-storage_map = {}
-
+import sys
 
 def save(key, val):
 
@@ -30,4 +25,9 @@ def get_val(key):
     return value
 
 def get_storage(hash_key):
-    return 'storage1'
+    storages = ['storage1', 'storage2']
+
+    if hash_key in range(-sys.maxsize, 1):
+        return storages[0]
+    if hash_key in range(0, sys.maxsize + 1):
+        return storages[1]
