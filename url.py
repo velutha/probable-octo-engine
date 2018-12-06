@@ -1,37 +1,32 @@
 import base64
 
-from db_store import save, get_val
+from db_store import DB
 class UrlShortener():
 
     # lookup_dict = {}
 
     def __init__(self):
-        pass
+        self.db = DB()
 
-    @classmethod
-    def get_short_url(cls, url):
+    def get_short_url(self, url):
 
         shortcode = base64.b64encode(bytes(str(hash(url)), 'utf-8'))[-6:]
-        shortcode = cls.get_unique_code(shortcode)
+        shortcode = self.get_unique_code(shortcode)
         shortcode = shortcode.decode('utf-8')
-        is_saved = save(shortcode, url)
+        is_saved = self.db.save(shortcode, url)
         # cls.lookup_dict[shortcode] = url
         return shortcode
 
-    @classmethod
-    def get_long_url(cls, key):
-        url = get_val(key)
+    def get_long_url(self, key):
+        url = self.db.get_val(key)
         # if key in cls.lookup_dict:
             # return cls.lookup_dict[key]
         return url
 
-    @classmethod
-    def get_unique_code(cls, code):
-        if get_val(code):
-            import pdb
-            pdb.set_trace()
+    def get_unique_code(self, code):
+        if self.db.get_val(code):
             code = list(code)
             code[-1] += 1
             code = "".join(code)
-            return cls.get_unique_code(code)
+            return self.get_unique_code(code)
         return code

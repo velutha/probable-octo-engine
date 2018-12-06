@@ -1,33 +1,35 @@
 import dbm
 import sys
 
-def save(key, val):
+class DB():
 
-    hash_key = hash(key)
-    storage = get_storage(hash_key)
-    hash_key = str(hash_key)
-    with dbm.open(storage, 'c') as db:
-        db[hash_key] = val
+    def save(self, key, val):
 
-    return True
+        hash_key = hash(key)
+        storage = self.get_storage(hash_key)
+        hash_key = str(hash_key)
+        with dbm.open(storage, 'c') as db:
+            db[hash_key] = val
 
-def get_val(key):
+        return True
 
-    hash_key = hash(key)
-    storage = get_storage(hash_key)
-    hash_key = str(hash_key)
-    with dbm.open(storage, 'c') as db:
-        try:
-            value = db[hash_key]
-        except KeyError:
-            value = None
+    def get_val(self, key):
 
-    return value
+        hash_key = hash(key)
+        storage = self.get_storage(hash_key)
+        hash_key = str(hash_key)
+        with dbm.open(storage, 'c') as db:
+            try:
+                value = db[hash_key]
+            except KeyError:
+                value = None
 
-def get_storage(hash_key):
-    storages = ['storage1', 'storage2']
+        return value
 
-    if hash_key in range(-sys.maxsize, 1):
-        return storages[0]
-    if hash_key in range(0, sys.maxsize + 1):
-        return storages[1]
+    def get_storage(self, hash_key):
+        storages = ['storage1', 'storage2']
+
+        if hash_key in range(-sys.maxsize, 1):
+            return storages[0]
+        elif hash_key in range(0, sys.maxsize + 1):
+            return storages[1]
