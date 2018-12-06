@@ -11,8 +11,9 @@ class UrlShortener():
     @classmethod
     def get_short_url(cls, url):
 
-        shortcode = base64.b64encode(bytes(str(hash(url)), 'utf-8'))[-6:].decode('utf-8')
+        shortcode = base64.b64encode(bytes(str(hash(url)), 'utf-8'))[-6:]
         shortcode = cls.get_unique_code(shortcode)
+        shortcode = shortcode.decode('utf-8')
         is_saved = save(shortcode, url)
         # cls.lookup_dict[shortcode] = url
         return shortcode
@@ -27,6 +28,8 @@ class UrlShortener():
     @classmethod
     def get_unique_code(cls, code):
         if get_val(code):
+            import pdb
+            pdb.set_trace()
             code = list(code)
             code[-1] += 1
             code = "".join(code)
